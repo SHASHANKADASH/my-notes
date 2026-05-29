@@ -30,7 +30,15 @@ It consists of 5 components:
     - This component is responsible for assigning pods to nodes within a cluster.
     - It ensures that workloads are distributed efficiently while meeting resource requirements, policy constraints and organization goals.
     - **How the K8s scheduler works?**
-        - 
+        - The scheduler works in two key phases, *filtering* and *scoring*.
+        - Filtering: The scheduler identifies the nodes that can run the pods based on resource requests (CPU, memory, ephemeral storage) and constraints like node affinity, taints and tolerations.
+        - Scoring: Each eligible node is scored based on various parameters like resource availability, topology preferences and workload distribution. The node with highest score is selected to run the pod.
+        - Once the node is selected the scheduler binds the pod to it, enabling the kubelet on the node to start running the pod.
+    - Key features of scheduler:
+        1. Resource awareness: Ensures that pods are scheduled only on those nodes which have sufficient resources to meet their requests and limits.
+        2. Custom policies: Supports advanced rules like node affinity , anti affinity, and custom scheduling policies.
+        3. Extensibility: Allows users to implement custom schedulers for specific workload environments.
+        4. Preemption: Enables higher priority pods to displace lower priority ones when resources are scarce. Further reading https://zesty.co/finops-glossary/kubernetes-scheduler/.
 4. **kube-controller-manager**
     - The k8s controller manager is a daemon that runs multiple controllers within a single binary.
     - Each controller manages a specific type of resource in k8s cluster, such as, nodes, pods, endpoints, and replication controllers.
@@ -53,3 +61,46 @@ It consists of 5 components:
       3. Automation: Does automatic pod scaling , volume binding and service endpoint updates reducing manual intervention.
       4. Flexibility: Supports the integration of custom controllers, allowing orgs to extend k8s functionality for specific use cases.
 5. **cloud-controller-manager**
+    - The cloud controller manager (CCM) is a control plane component that links your kubernetes cluster to a cloud provider's API.
+    - In simple words, the cloud container manager is an deployment in k8s control plane which enables k8s to talk to individual cloud providers regarding the state of infrastructure.
+    - It basically separates the logic required to interact with the cloud platform from the core components that only interact with your cluster.
+    - The CCM only runs controllers that are specific to your cloud provider. If we are running k8s on our own premises, the cluster does not have a CCM.
+    - Controllers provided by CCM:
+        - Node controller: This controller is responsible for checking if a particular node is present in the cloud or not and updating the node labels with appropriate labels and annotations.
+        - Service Controller: When we deploy a service of type load balancer in the k8s cluster, then this controller comes in the picture. This controller is responsible for creating,updating,
+        - deleting load balancer in the cloud env.
+        - Route Controller: Responsible for configuring routes in the cloud environment so that the nodes remain reachable.
+    - For further reading: https://medium.com/@murtazavasi.dev/demystifying-cloud-controller-manager-0ba2d509603c
+### Node:
+- A node is a physical or virtual machine that serves as a worker in the cluster.
+- Nodes are responsible for running the workloads, which are encapsulated in pods.
+- A k8s cluster contains multiple nodes that work together to ensure that your applications are available, scalable and distributed efficiently.
+- Types of nodes:
+    - **Master Nodes (Control plane nodes)**: 
+        - Master node is the brain of the k8s cluster. It manages and controls the entire cluster, orchestrating the deployment and life cycle of applications across worker nodes. 
+        - The master node's job is to make decisions about scheduling, monitoring the state of the cluster and handling all the management tasks.
+        - The master node is the one which hosts various components of the control plane including kube-api-server, control-manager, scheduler, etcd, cloud-controller-manager.
+        - Key responsibilities:
+             1. Scheduling pods on worker nodes.
+             2. Monitoring the health and status of the cluster.
+             3. Managing configurations and cluster wide policies.
+             4. Scaling applications on demand.
+             5. Monitoring communication between components through the API server.
+             *Note: Most of these functions are the functions of control plane only.*
+    - **Worker Nodes**:
+         - Worker nodes are where the actual applications run.
+         - Each worker node hosts the pods and ensures they have the necessary computing resources to operate effectively.
+         - Components of worker nodes:
+            - Kubelet: An agent running on each node that communicates with the master node. It ensures that the pods are running as expected and can restart them if necessary.
+            - Kube-proxy: Handles networking, managing network rules, and enabling communication between pods, both within the node and across different nodes in the cluster.
+            - Container-runtime: The software responsible for running the containers. (e.g. containerd, CRI-O, Docker(deprecated)). It pulls container images, starts and stops containers, and interacts with other kubernetes components.
+            - Key Responsibilities:
+                1. Running and managing the pods assigned to them by master node.
+                2. Maintaining network connections for communication between pods.
+                3. Ensuring the required resources (CPU, memory, storage) are available for the running pods.
+### Pods
+- Pods are the smallest, most basic deployable units. 
+- A pods represent a single instance of a running process in cluster. 
+- Each pod can contain one(most common) or more tightly coupled containers. (OCI compliant containers managed by containerd) along with shared storage, networking and specifications for how to run the containers.
+- All containers in a pod share the same storage volumes and network IP.
+- Since all containers in a POD share the same network namespace, they can communicate with each other using localhost and they share the same IP address. From out side the pod, the containers are accessible via the pod's IP. 
