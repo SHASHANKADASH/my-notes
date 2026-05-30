@@ -1,12 +1,12 @@
-# Kubernetes basic concepts
-## Kubernetes cluster architecture:
+# Kubernetes cluster architecture:
+
 *This document outlines the various components you need to have for a complete and working Kubernetes cluster.*
 ![[kubernetes-cluster-architecture.png|840]]
 ### Cluster:
 - A Kubernetes cluster consists of a control plane plus a set of worker machines, called nodes, that run containerized applications. 
 - Every cluster needs at least one worker node in order to run Pods.
 ### Control Plane
-- It is the brain  of kubernetes cluster.
+- It is the brain of kubernetes cluster.
 - It acts as the central management layer that orchestrates global decisions. It manages cluster state, schedules workloads and enforces policies
 It consists of 5 components:
 1. **kube-api-server** : 
@@ -99,8 +99,9 @@ It consists of 5 components:
                 2. Maintaining network connections for communication between pods.
                 3. Ensuring the required resources (CPU, memory, storage) are available for the running pods.
 ### Pods
-- Pods are the smallest, most basic deployable units. 
-- A pods represent a single instance of a running process in cluster. 
+- Pods are the smallest, most basic deploy-able units. 
+- A pod represents a single instance of a running process in cluster. 
 - Each pod can contain one(most common) or more tightly coupled containers. (OCI compliant containers managed by containerd) along with shared storage, networking and specifications for how to run the containers.
 - All containers in a pod share the same storage volumes and network IP.
 - Since all containers in a POD share the same network namespace, they can communicate with each other using localhost and they share the same IP address. From out side the pod, the containers are accessible via the pod's IP. 
+- Pods are meant to be ephemeral. They can be created, destroyed, and created easily by kubernetes as needed. When a pod is deleted, it does not get restarted. Instead, a new pod is created by k8s to replace it if needed.
