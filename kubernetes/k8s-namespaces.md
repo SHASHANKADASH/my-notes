@@ -1,7 +1,7 @@
 # Kubernetes Namespaces
 - Namespaces provide a way to partition and organize resources within a k8s cluster.
 - They can be created using kubectl or yaml config file.
-![[k8s-namespaces.png|419]]
+![[k8s-namespaces.png|423]]
 - Namespaces can be used for logical groupings.
 - For example dev, test, prod etc.
 - If a resource is name spaced that means it cannot be created without a namespace.

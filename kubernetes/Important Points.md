@@ -1,0 +1,1 @@
+- Kubernetes philosophy is built around desired sate and current/actual state. It continuously compares desired and actual state and tries to resolve the differences. This process is called **reconciliation loop**.
