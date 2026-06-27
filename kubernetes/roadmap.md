@@ -2,10 +2,10 @@
 
 | Phase | Topic                | Goal                                 | Is Completed |
 | ----- | -------------------- | ------------------------------------ | ------------ |
-| 0     | Kubernetes Basics    | Cluster, nodes, kubectl, YAML        |              |
-| 1     | Pod                  | Run single container                 |              |
-| 2     | Deployment           | Replica management & rolling updates |              |
-| 3     | Service              | Internal networking                  |              |
+| 0     | Kubernetes Basics    | Cluster, nodes, kubectl, YAML        | Yes          |
+| 1     | Pod                  | Run single container                 | Yes          |
+| 2     | Deployment           | Replica management & rolling updates | Yes          |
+| 3     | Service              | Internal networking                  | Yes          |
 | 4     | ConfigMap + Secret   | Externalized config                  |              |
 | 5     | Persistent Volume    | Data persistence                     |              |
 | 6     | Ingress              | External access                      |              |
