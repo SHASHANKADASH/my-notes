@@ -119,3 +119,24 @@ kubectl delete pods nginx-deployment-7445c8fb45-5w4p4
 kubectl scale deployment fraud-service-deployment --replicas=5
 ```
 ### 5. Rolling Update
+- Currently we have ngnix:alpine image deployed in our pods.
+- Let's say we want to deploy a different image. In a real world use case it will be like currently v1 of my backend service is running and I have made changes to it, now I want to deploy v2.
+- To replicate this scenario, we will use another image nginx:mainline-alpine in our deployment.yml. 
+- When we apply this updated yml file, we will notice that k8s doesn't delete and create all pods. That would mean downtime.
+- Instead it will create a new v2 pod, wait for it to be healthy and then delete one v1 pod. This process will repeat till all the new pods are created with new image.
+- This is called rolling update.
+![[screen-2026-06-08_23-00-48.png]]
+- In the above screenshot we had three pods running in the beginning. When we apply the updated deployment.yml notice how k8s first spins up a new pod with id -mgqks and then it terminates one of the existing instances. This process is repeated till the desired state is reached.
+### 6. Deployment revision history
+- Each rollout creates a new version. The update we did in the last update will create a version 2.
+- We can get the versions using 
+```bash
+kubectl rollout history deployment/nginx-deployment 
+```
+### 7. Rollback
+- Suppose our new version v2 is broken, we can rollback to the previous version.
+```
+kubectl rollout undo deployment/nginx-deployment
+```
+- If run the command : `kubectl get pods -w`  we can see the existing pods terminating and new pods appearing in there place.
+- You can describe any of the pods in the replica set and see that the image which the new pods have is the old one.
